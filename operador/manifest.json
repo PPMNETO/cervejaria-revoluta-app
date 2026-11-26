@@ -1,14 +1,14 @@
 {
-  "name": "Cervejaria Revoluta",
-  "short_name": "Revoluta",
-  "id": "/cervejaria-revoluta-app/",
+  "name": "Revoluta Operador",
+  "short_name": "Revoluta OP",
+  "id": "/cervejaria-revoluta-app/operador/",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#070a0f",
   "theme_color": "#070a0f",
-  "description": "Aplicativo web em tela cheia da Cervejaria Revoluta.",
+  "description": "Painel operacional da Cervejaria Revoluta.",
   "icons": [
     {
       "src": "./icon-192.png",
