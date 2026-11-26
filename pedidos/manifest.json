@@ -1,14 +1,14 @@
 {
   "name": "Cervejaria Revoluta",
   "short_name": "Revoluta",
-  "id": "/cervejaria-revoluta-app/",
+  "id": "/cervejaria-revoluta-app/pedidos/",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#070a0f",
   "theme_color": "#070a0f",
-  "description": "Aplicativo web em tela cheia da Cervejaria Revoluta.",
+  "description": "Pedidos diretos da Cervejaria Revoluta.",
   "icons": [
     {
       "src": "./icon-192.png",
