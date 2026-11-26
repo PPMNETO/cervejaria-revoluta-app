@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#070a0f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Revoluta" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>Cervejaria Revoluta</title>
+
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="./icon-512.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="./icon-512.png" />
+
+  <style>
+    :root {
+      --bg-splash: #070a0f;
+      --accent-yellow: #FFF200;
+      --accent-cyan: #38bdf8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background-color: var(--bg-splash);
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #app-frame {
+      display: block;
+      width: 100%;
+      height: 100dvh;
+      border: 0;
+      background-color: var(--bg-splash);
+    }
+
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: radial-gradient(circle at 50% 35%, rgba(255, 242, 0, 0.10), transparent 55%), var(--bg-splash);
+      transition: opacity 0.28s ease, visibility 0.28s ease;
+      padding: 24px;
+      text-align: center;
+    }
+
+    #splash-screen.oculto {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .splash-icon {
+      width: 92px;
+      height: 92px;
+      border-radius: 22px;
+      box-shadow: 0 0 28px rgba(255, 242, 0, 0.22);
+      object-fit: cover;
+    }
+
+    .splash-spinner {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 242, 0, 0.22);
+      border-top-color: var(--accent-yellow);
+      border-right-color: var(--accent-cyan);
+      animation: spin 0.75s linear infinite;
+    }
+
+    .splash-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-yellow);
+    }
+
+    .splash-sub {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="splash-screen" aria-live="polite">
+    <img src="./icon-192.png" alt="Cervejaria Revoluta" class="splash-icon" />
+    <div class="splash-spinner"></div>
+    <div class="splash-title">Cervejaria Revoluta</div>
+    <div id="splash-status" class="splash-sub">Conectando ao sistema...</div>
+  </div>
+
+  <iframe
+    id="app-frame"
+    allow="clipboard-read; clipboard-write; geolocation"
+    referrerpolicy="no-referrer-when-downgrade"
+  ></iframe>
+
+  <script>
+    // COLE AQUI A SUA URL DO APPS SCRIPT TERMINADA EM /exec
+    const URL_APP_EXEC = "https://script.google.com/macros/s/COLE_AQUI_O_ID_DA_SUA_IMPLANTACAO/exec";
+
+    (function inicializarCasca() {
+      const frame = document.getElementById("app-frame");
+      const splash = document.getElementById("splash-screen");
+      const statusEl = document.getElementById("splash-status");
+
+      if (!URL_APP_EXEC || URL_APP_EXEC.indexOf("COLE_AQUI") !== -1) {
+        statusEl.textContent = "Configure a URL /exec em URL_APP_EXEC no index.html.";
+        return;
+      }
+
+      // Repassa parâmetros da URL atual (ex.: ?p=operador) caso existam
+      const buscaAtual = window.location.search || "";
+      const separador = URL_APP_EXEC.indexOf("?") === -1 ? "?" : "&";
+      const urlDestino = buscaAtual
+        ? (URL_APP_EXEC + separador + buscaAtual.replace(/^\?/, ""))
+        : URL_APP_EXEC;
+
+      frame.addEventListener("load", function () {
+        setTimeout(function () {
+          splash.classList.add("oculto");
+        }, 180);
+      });
+
+      // Fallback de segurança caso o iframe demore além do esperado
+      setTimeout(function () {
+        splash.classList.add("oculto");
+      }, 9000);
+
+      frame.src = urlDestino;
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("./sw.js").catch(function (err) {
+            console.warn("Falha ao registrar Service Worker:", err);
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
